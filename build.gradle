@@ -1,0 +1,24 @@
+// NOTE : there are other ways to workaround other than this
+// add below 
+//  android {
+//   ...
+//  }
+android.applicationVariants.all { variant ->
+    variant.outputs.all { output ->
+        //eg to define apk name
+        def appName = ""
+        def newApkName ="${appName}-v${flutterVersionName}-b${flutterVersionCode}.apk"
+        if (variant.buildType.name == "release") {
+            variant.assemble.doLast {
+              // folder name * you can change the directory to other you preferred
+                def destFolder = file('apk/' )
+                destFolder.mkdirs()
+                copy {
+                    from output.outputFile
+                    into destFolder
+                    rename outputFileName, newApkName
+                }
+            }
+        }
+    }
+}
